@@ -17,15 +17,15 @@ class Category
 		$stmt->execute(['category' => $category]);
 		$arCategories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		if (!empty($arCategories)) {
-			$msg = 'Категория с таким названием уже существует!';
+			$result = false;
 		}
 		else {
 			$sql = 'INSERT INTO categories(category_name) VALUES (:category)';
 			$stmt = $db->prepare($sql);
 			$stmt->execute(['category' => $category]);	
-			$msg = 'Категория добавлена!';			
+			$result = true;		
 		}
-		return $msg;
+		return $result;
 	}
 
 	/**
@@ -33,19 +33,14 @@ class Category
     **/
 	public function removeCategory($category_id)
 	{
-		$msg = '';
 		$db = db();			
-
 		$sql = "DELETE FROM questions WHERE category_id=:category_id";
 		$stmt = $db->prepare($sql);
 		$stmt->execute(['category_id' => $category_id]);
 
 		$sql = "DELETE FROM categories WHERE id=:category_id";
 		$stmt = $db->prepare($sql);
-		$stmt->execute(['category_id' => $category_id]);
-
-		$msg = 'Категория удалена и все вопросы с ней!';
-		return $msg;
+		$stmt->execute(['category_id' => $category_id]);		
 	}
 
 	/**

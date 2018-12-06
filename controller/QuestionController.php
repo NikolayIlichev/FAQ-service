@@ -25,6 +25,8 @@ class QuestionController
             $email = htmlspecialchars(trim($_POST['email']));
             
             if($questionModel->addQuestion($question, $category_id, $author, $email)) {
+                $logData = date('Y-m-d H-i-s').': Добавлен новый вопрос в категорию с id '.$category_id."\r\n";
+                writeLog($logData);
                 $msg = 'Вопрос добавлен!';
             }
             else {
@@ -65,7 +67,9 @@ class QuestionController
                 $category_id = htmlspecialchars(trim($_POST['category_id']));
                 $author = htmlspecialchars(trim($_POST['author']));
                 
-                if($questionModel->changeQuestion($question_id, $question, $active, $answer, $category_id, $author)) {
+                if($questionModel->changeQuestion($question_id, $question, $active, $answer, $category_id, $author)) {                    
+                    $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' обновил вопрос с id '.$question_id."\r\n";
+                    writeLog($logData);
                     $msg = 'Вопрос обновлен!';
                 }
                 else {
@@ -87,7 +91,10 @@ class QuestionController
             $questionModel = new Question();
             $question_id = htmlspecialchars(trim($_POST['question_id']));
             $new_category_id = htmlspecialchars(trim($_POST['new_category_id']));
-            $msg = $questionModel->changeQuestionCategory($question_id, $new_category_id);            
+            $questionModel->changeQuestionCategory($question_id, $new_category_id);
+            $msg = 'Категория изменена!';    
+            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' изменил категорию у вопроса с id '.$question_id."\r\n";
+            writeLog($logData);        
         }
         else {
             $msg = 'Ошибка';
@@ -104,7 +111,10 @@ class QuestionController
         if (!empty($_POST['question_id'])) {
             $question_id = (int) htmlspecialchars(trim($_POST['question_id']));
             $questionModel = new Question();
-            $msg = $questionModel->removeQuestion($question_id);
+            $questionModel->removeQuestion($question_id);
+            $msg = 'Вопрос удален!';
+            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' удалил вопрос с id '.$question_id."\r\n";
+            writeLog($logData); 
         }
         else {
             $msg = 'Передан пустой question_id';
@@ -163,7 +173,10 @@ class QuestionController
             $question_active = htmlspecialchars(trim($_POST['active']));
             $question_id = htmlspecialchars(trim($_POST['question_id']));
             $questionModel = new Question();
-            $msg = $questionModel->changeQuestionActive($question_active, $question_id);            
+            $questionModel->changeQuestionActive($question_active, $question_id); 
+            $msg = 'Статус обновлен!';
+            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' изменил статус вопроса с id '.$question_id."\r\n";
+            writeLog($logData);           
         }
         else {
             $msg = 'Ошибка';

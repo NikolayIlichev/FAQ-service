@@ -24,22 +24,22 @@ class Admin
     **/
     public function add($login, $password, $confirm_password) 
     {
-        $msg = '';
+        $result = false;
         $db = db();
         $sql = "SELECT id FROM users WHERE login=:login";
         $stmt = $db->prepare($sql);
         $stmt->execute(['login' => $login]);
         $arUser = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (!empty($arUser)) {
-            $msg = 'Администратор с таким логином уже существует!';
+            $result = false;
         }
         else {
             $sql = "INSERT INTO users(login, password) VALUES (:login, :password)";
             $stmt = $db->prepare($sql);
             $stmt->execute(['login' => $login, 'password' => $password]);
-            $msg = 'Администратор добавлен!';                
+            $result = true;               
         }
-        return $msg;
+        return $result;
     }
 
     /**
@@ -47,13 +47,10 @@ class Admin
     **/
     public function remove($admin_id)
     {
-        $msg = '';
         $db = db();            
         $sql = "DELETE FROM users WHERE id=:admin_id";
         $stmt = $db->prepare($sql);
-        $stmt->execute(['admin_id' => $admin_id]);
-        $msg = 'Администратор удален!';
-        return $msg;
+        $stmt->execute(['admin_id' => $admin_id]);        
     }
 
     /**
@@ -77,7 +74,7 @@ class Admin
         $sql = 'UPDATE users SET password=:password WHERE id=:admin_id LIMIT 1';
         $stmt = $db->prepare($sql);
         if($stmt->execute(['password' => $newPassword, 'admin_id' => $admin_id])) {
-            return 'Пароль обновлен';
+            return true;
         }
     }
 

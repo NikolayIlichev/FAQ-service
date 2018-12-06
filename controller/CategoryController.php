@@ -15,8 +15,14 @@ class CategoryController
         $msg = '';
         if (!empty($_POST['category'])) {    
             $categoryModel = new Category();
-            $category = htmlspecialchars(trim($_POST['category']));
-            $msg = $categoryModel->addCategory($category);            
+            $category = htmlspecialchars(trim($_POST['category']));            
+            if (!$categoryModel->addCategory($category)) { 
+                $msg = 'Категория с таким названием уже существует!';
+            } else {
+                $msg = 'Категория добавлена!';
+                $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' добавил категорию '.$category."\r\n";
+                writeLog($logData);
+            }                 
         }
         else {
             $msg = 'Пожалуйста, напишите название категории!';
@@ -33,7 +39,10 @@ class CategoryController
         if (!empty($_POST['category_id'])) {
             $categoryModel = new Category();
             $category_id = (int) htmlspecialchars(trim($_POST['category_id']));
-            $msg = $categoryModel->removeCategory($category_id);
+            $categoryModel->removeCategory($category_id);
+            $msg = 'Категория удалена и все вопросы с ней!';            
+            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' удалил категорию с id '.$category_id."\r\n";
+            writeLog($logData);  
         }
         else {
             $msg = 'Передан пустой category_id';

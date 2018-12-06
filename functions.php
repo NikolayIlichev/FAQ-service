@@ -29,4 +29,12 @@ function render($template, $data = '', $msg = '')
 {
     include 'view/'.$template;
 }
+
+/**
+*    Функция для записи сообщений в лог
+**/
+function writeLog($data)
+{
+    file_put_contents('logs/log.txt', $data, FILE_APPEND);
+}
 ?>

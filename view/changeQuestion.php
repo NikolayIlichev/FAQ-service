@@ -11,7 +11,7 @@
 		<ul>
 			<li><a href="index.php">На главную</a></li>
 			<li><a href="?category=<?php echo $data['changeQuestion'][0]['category_id']; ?>">Управление вопросами</a></li>
-			<li><a href="?question=list">Страница вопросов</a></li>			
+			<li><a href="?question=list">Страница вопросов</a></li>	
 		</ul>
 	</nav>
 

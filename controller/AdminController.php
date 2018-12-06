@@ -27,6 +27,8 @@ class AdminController
                 render('auth.php', false, $msg);
             }
             else {
+                $logData = date('Y-m-d H-i-s').': Выполнена авторизация пользователя '.$arAdmin[0]['login'].' ('.$arAdmin[0]['id'].')'."\r\n";
+                writeLog($logData);
                 $_SESSION['admin_id'] = $arAdmin[0]['id'];
                 $_SESSION['login'] = $arAdmin[0]['login'];
                 header('Location: index.php', TRUE, 301);
@@ -78,7 +80,14 @@ class AdminController
             $confirm_password = htmlspecialchars(trim($_POST['confirm_password']));
             if ($password === $confirm_password ) {        
                 $admin = new Admin();
-                $msg = $admin->add($login, $password, $confirm_password);
+                if (!$admin->add($login, $password, $confirm_password)) {
+                    $msg = 'Администратор с таким логином уже существует!';
+                } else {
+                    $msg = 'Администратор добавлен!'; 
+                    $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' создал нового администратора '.$login."\r\n";
+                    writeLog($logData);
+                }
+                
             }
             else {
                 $msg = 'Пароли не совпадают!';
@@ -99,7 +108,10 @@ class AdminController
         if (!empty($_POST['admin_id'])) {
             $admin_id = (int) htmlspecialchars(trim($_POST['admin_id']));
             $admin = new Admin();
-            $msg = $admin->remove($admin_id);
+            $admin->remove($admin_id);
+            $msg = 'Администратор удален!';
+            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' удалил администратора  с id '.$admin_id."\r\n";
+            writeLog($logData);
         }
         else {
             $msg = 'Передан пустой admin_id';
@@ -117,7 +129,11 @@ class AdminController
             $password = htmlspecialchars(trim($_POST['password']));
             $admin_id = (int) htmlspecialchars(trim($_POST['admin_id']));
             $admin = new Admin();
-            $msg = $admin->passChange($password, $admin_id);
+            if ($admin->passChange($password, $admin_id)) {
+                $msg = 'Пароль обновлен';                
+                $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' изменил пароль у администратора с id '.$admin_id."\r\n";
+                writeLog($logData);
+            }
         }
         return $msg;
     }
@@ -144,6 +160,8 @@ class AdminController
     public function logout() 
     {
         $admin = new Admin();
+        $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' завершил сессию'."\r\n";
+        writeLog($logData);
         $admin->logout();
         header('Location: /', TRUE, 301);
     }

@@ -10,6 +10,7 @@
 		<ul>
 			<li><a href="?admin=categories">Список категорий</a></li>
 			<li><a href="?admin=main">Панель управления</a></li>
+			<li><a href="?question=add">Задать вопрос</a></li>
 			<li><a href="index.php">Главная</a></li>			
 			<li><a href="?logout=yes">Выход</a></li>			
 		</ul>

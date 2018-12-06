@@ -22,13 +22,10 @@ class Question
     **/
     public function removeQuestion($question_id)
     {
-        $msg = '';
         $db = db();            
         $sql = "DELETE FROM questions WHERE id=:question_id";
         $stmt = $db->prepare($sql);
         $stmt->execute(['question_id' => $question_id]);
-        $msg = 'Вопрос удален!';
-        return $msg;
     }
 
     /**
@@ -36,13 +33,10 @@ class Question
     **/
     public function changeQuestionActive($question_active, $question_id)
     {
-        $msg = '';
         $db = db();
         $sql = 'UPDATE questions SET active=:question_active WHERE id=:question_id LIMIT 1';
         $stmt = $db->prepare($sql);
         $stmt->execute(['question_active' => $question_active, 'question_id' => $question_id]);
-        $msg = 'Статус обновлен!';
-        return $msg;
     }
 
     /**
@@ -50,13 +44,10 @@ class Question
     **/
     public function changeQuestionCategory($question_id, $new_category_id)
     {
-        $msg = '';
         $db = db();
         $sql = 'UPDATE questions SET category_id=:new_category_id WHERE id=:question_id LIMIT 1';
         $stmt = $db->prepare($sql);
         $stmt->execute(['question_id' => $question_id, 'new_category_id' => $new_category_id]);
-        $msg = 'Категория изменена!';
-        return $msg;
     }
 
     /**

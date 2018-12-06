@@ -25,6 +25,9 @@ if (!empty($_SESSION['admin_id'])) {
     elseif (!empty($_GET['question']) && $_GET['question'] == 'list') {
         $questionController->getQuestionsList();
     }
+    elseif (!empty($_GET['question']) && $_GET['question'] == 'add') {
+        $questionController->addQuestion();
+    }
     elseif (!empty($_GET['question_change'])) {
         $questionController->changeQuestion();
     }
