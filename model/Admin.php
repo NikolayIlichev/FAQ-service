@@ -59,7 +59,7 @@ class Admin
     public function getAdminList()
     {
         $db = db();
-        $sql = 'SELECT * FROM users';
+        $sql = 'SELECT id, login, password FROM users';
         $stmt = $db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

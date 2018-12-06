@@ -77,7 +77,7 @@ class Category
 	public function getCategoryList()
 	{
 		$db = db();
-		$sql = 'SELECT * FROM categories ORDER BY category_name';
+		$sql = 'SELECT id, category_name FROM categories ORDER BY category_name';
 		$stmt = $db->prepare($sql);
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
