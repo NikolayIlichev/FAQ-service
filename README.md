@@ -31,9 +31,9 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-Либо воспользоваться файлом dump.sql в корне проекта.
+Либо воспользоваться файлом faq.sql в корне проекта.
 
 Описание сервиса
 -----------------------------------
 
-
+Краткое описание сервиса можно прочитать по ссылке https://docs.google.com/document/d/1DMtamNZj0Z5wN4SAIGl5pCqLbj_mjEMgzTeFLsgF2fo/edit?usp=sharing
