@@ -32,8 +32,7 @@ class Admin
         $arUser = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (!empty($arUser)) {
             $result = false;
-        }
-        else {
+        } else {
             $sql = "INSERT INTO users(login, password) VALUES (:login, :password)";
             $stmt = $db->prepare($sql);
             $stmt->execute(['login' => $login, 'password' => $password]);

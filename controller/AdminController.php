@@ -21,27 +21,22 @@ class AdminController
             if (!empty($arAdmin[0]) && $arAdmin[0]['password'] !== $password) {
                 $msg = 'Неверный пароль!';
                 render('auth.php', false, $msg);
-            }
-            elseif (empty($arAdmin[0])) {                
+            } elseif (empty($arAdmin[0])) {                
                 $msg = 'Пользователь с таким логином не найден!';
                 render('auth.php', false, $msg);
-            }
-            else {
+            } else {
                 $logData = date('Y-m-d H-i-s').': Выполнена авторизация пользователя '.$arAdmin[0]['login'].' ('.$arAdmin[0]['id'].')'."\r\n";
                 writeLog($logData);
                 $_SESSION['admin_id'] = $arAdmin[0]['id'];
                 $_SESSION['login'] = $arAdmin[0]['login'];
                 header('Location: index.php', TRUE, 301);
             }
-        }
-        elseif (!empty($_POST['log_in'])) {
+        } elseif (!empty($_POST['log_in'])) {
             $msg = 'Все поля должны быть заполнены!';
             render('auth.php', false, $msg);
-        }    
-        elseif(empty($_SESSION['admin_id'])) {
+        } elseif(empty($_SESSION['admin_id'])) {
             render('auth.php');
-        }
-        else {
+        } else {
             render('index.php');
         }
     }
@@ -54,11 +49,9 @@ class AdminController
         $msg = '';
         if (isset($_POST['admin_add'])) {
             $msg = $this->addAdmin();
-        }
-        elseif (isset($_POST['admin_remove'])) {
+        } elseif (isset($_POST['admin_remove'])) {
             $msg = $this->removeAdmin();
-        }
-        elseif (isset($_POST['pass_change'])) {
+        } elseif (isset($_POST['pass_change'])) {
             $msg = $this->passChange();
         }
         $arAdmins = array();
@@ -88,12 +81,10 @@ class AdminController
                     writeLog($logData);
                 }
                 
-            }
-            else {
+            } else {
                 $msg = 'Пароли не совпадают!';
             }
-        }
-        elseif (!empty($_POST['admin_add'])) {
+        } elseif (!empty($_POST['admin_add'])) {
             $msg = 'Все поля должны быть заполнены!';
         }
         return $msg;
@@ -106,14 +97,13 @@ class AdminController
     {
         $msg = '';
         if (!empty($_POST['admin_id'])) {
-            $admin_id = (int) htmlspecialchars(trim($_POST['admin_id']));
+            $adminId = (int) htmlspecialchars(trim($_POST['admin_id']));
             $admin = new Admin();
-            $admin->remove($admin_id);
+            $admin->remove($adminId);
             $msg = 'Администратор удален!';
-            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' удалил администратора  с id '.$admin_id."\r\n";
+            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' удалил администратора  с id '.$adminId."\r\n";
             writeLog($logData);
-        }
-        else {
+        } else {
             $msg = 'Передан пустой admin_id';
         }
         return $msg;
@@ -127,11 +117,11 @@ class AdminController
         $msg = '';
         if (!empty($_POST['password']) && !empty($_POST['admin_id'])) {
             $password = htmlspecialchars(trim($_POST['password']));
-            $admin_id = (int) htmlspecialchars(trim($_POST['admin_id']));
+            $adminId = (int) htmlspecialchars(trim($_POST['admin_id']));
             $admin = new Admin();
-            if ($admin->passChange($password, $admin_id)) {
+            if ($admin->passChange($password, $adminId)) {
                 $msg = 'Пароль обновлен';                
-                $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' изменил пароль у администратора с id '.$admin_id."\r\n";
+                $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' изменил пароль у администратора с id '.$adminId."\r\n";
                 writeLog($logData);
             }
         }

@@ -23,8 +23,7 @@ class CategoryController
                 $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' добавил категорию '.$category."\r\n";
                 writeLog($logData);
             }                 
-        }
-        else {
+        } else {
             $msg = 'Пожалуйста, напишите название категории!';
         }
         return $msg;
@@ -38,13 +37,12 @@ class CategoryController
         $msg = '';
         if (!empty($_POST['category_id'])) {
             $categoryModel = new Category();
-            $category_id = (int) htmlspecialchars(trim($_POST['category_id']));
-            $categoryModel->removeCategory($category_id);
+            $categoryId = (int) htmlspecialchars(trim($_POST['category_id']));
+            $categoryModel->removeCategory($categoryId);
             $msg = 'Категория удалена и все вопросы с ней!';            
-            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' удалил категорию с id '.$category_id."\r\n";
+            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' удалил категорию с id '.$categoryId."\r\n";
             writeLog($logData);  
-        }
-        else {
+        } else {
             $msg = 'Передан пустой category_id';
         }
         return $msg;
@@ -60,8 +58,7 @@ class CategoryController
         $categoryModel = new Category();
         if (isset($_POST['add_category'])) {
             $msg = $this->addCategory();
-        }
-        elseif (isset($_POST['category_remove'])) {
+        } elseif (isset($_POST['category_remove'])) {
             $msg = $this->removeCategory();
         }
         $arCategories = $categoryModel->getCategoriesList();

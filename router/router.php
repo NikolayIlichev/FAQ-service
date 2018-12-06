@@ -12,41 +12,29 @@ $adminController = new AdminController();
 if (!empty($_SESSION['admin_id'])) {
     if (!empty($_GET['admin']) && $_GET['admin'] == 'list') {
         $adminController->getAdminList();
-    }    
-    elseif (!empty($_GET['admin']) && $_GET['admin'] == 'main') {
+    } elseif (!empty($_GET['admin']) && $_GET['admin'] == 'main') {
         $adminController->getAdminPage();
-    }
-    elseif (!empty($_GET['admin']) && $_GET['admin'] == 'categories') {
+    } elseif (!empty($_GET['admin']) && $_GET['admin'] == 'categories') {
         $categoryController->getCategoriesList();
-    }
-    elseif (!empty($_GET['category'])) {
+    } elseif (!empty($_GET['category'])) {
         $questionController->getCategoryQuestions($_GET['category']);
-    }
-    elseif (!empty($_GET['question']) && $_GET['question'] == 'list') {
+    } elseif (!empty($_GET['question']) && $_GET['question'] == 'list') {
         $questionController->getQuestionsList();
-    }
-    elseif (!empty($_GET['question']) && $_GET['question'] == 'add') {
+    } elseif (!empty($_GET['question']) && $_GET['question'] == 'add') {
         $questionController->addQuestion();
-    }
-    elseif (!empty($_GET['question_change'])) {
+    } elseif (!empty($_GET['question_change'])) {
         $questionController->changeQuestion();
-    }
-    elseif (!empty($_GET['logout']) && $_GET['logout'] == 'yes') {
+    } elseif (!empty($_GET['logout']) && $_GET['logout'] == 'yes') {
         $adminController->logout();
-    }
-    else {
+    } else {
         $adminController->index();
     }
-}
-elseif (!empty($_GET['question']) && $_GET['question'] == 'list') {
+} elseif (!empty($_GET['question']) && $_GET['question'] == 'list') {
     $questionController->getQuestionsList();
-}
-elseif (!empty($_GET['question']) && $_GET['question'] == 'add') {
+} elseif (!empty($_GET['question']) && $_GET['question'] == 'add') {
     $questionController->addQuestion();
-}
-elseif (!empty($_GET['auth']) && $_GET['auth'] == 'yes') {
+} elseif (!empty($_GET['auth']) && $_GET['auth'] == 'yes') {
     $adminController->getAuth();
-}
-else {
+} else {
     $adminController->index();
 }

@@ -24,8 +24,7 @@
     <span class="message">
 		
     <?php
-    if (!empty($msg)) 
-    {
+    if (!empty($msg)) {
         echo $msg;
     }
     ?>

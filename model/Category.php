@@ -18,8 +18,7 @@ class Category
 		$arCategories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		if (!empty($arCategories)) {
 			$result = false;
-		}
-		else {
+		} else {
 			$sql = 'INSERT INTO categories(category_name) VALUES (:category)';
 			$stmt = $db->prepare($sql);
 			$stmt->execute(['category' => $category]);	

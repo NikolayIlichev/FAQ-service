@@ -20,20 +20,18 @@ class QuestionController
         $arCategories = $categoryModel->getCategoryList();
         if (!empty($_POST['question'])) {    
             $question = htmlspecialchars(trim($_POST['question']));
-            $category_id = htmlspecialchars(trim($_POST['category_id']));
+            $categoryId = htmlspecialchars(trim($_POST['category_id']));
             $author = htmlspecialchars(trim($_POST['author']));
             $email = htmlspecialchars(trim($_POST['email']));
             
-            if($questionModel->addQuestion($question, $category_id, $author, $email)) {
-                $logData = date('Y-m-d H-i-s').': Добавлен новый вопрос в категорию с id '.$category_id."\r\n";
+            if($questionModel->addQuestion($question, $categoryId, $author, $email)) {
+                $logData = date('Y-m-d H-i-s').': Добавлен новый вопрос в категорию с id '.$categoryId."\r\n";
                 writeLog($logData);
                 $msg = 'Вопрос добавлен!';
-            }
-            else {
+            } else {
                 $msg = 'Вопрос НЕ добавлен!';
             }
-        }
-        elseif(isset($_POST['add_question'])) {
+        } elseif(isset($_POST['add_question'])) {
             $msg = 'Пожалуйста, напишите свой вопрос!';
         }
         render('addQuestion.php', $arCategories, $msg);
@@ -46,38 +44,35 @@ class QuestionController
     {
         $msg = '';
         $arCategories = array();
-        $question_id = htmlspecialchars(trim($_GET['question_change']));
+        $questionId = htmlspecialchars(trim($_GET['question_change']));
         $questionModel = new Question();
         $categoryModel = new Category();
         $arCategories['categories'] = $categoryModel->getCategoryList();
         if (!empty($_POST['change_question'])) {    
             if(empty($_POST['question'])) {
                 $msg = "Поле вопроса не заполнено!";
-            }
-            else {
-                $question_id = htmlspecialchars(trim($_POST['question_id']));
+            } else {
+                $questionId = htmlspecialchars(trim($_POST['question_id']));
                 $question = htmlspecialchars(trim($_POST['question']));
                 if (!empty($_POST['active'])) {
                     $active = 'Y';
-                }
-                else {
+                } else {
                     $active = 'N';
                 }
                 $answer = htmlspecialchars(trim($_POST['answer']));
-                $category_id = htmlspecialchars(trim($_POST['category_id']));
+                $categoryId = htmlspecialchars(trim($_POST['category_id']));
                 $author = htmlspecialchars(trim($_POST['author']));
                 
-                if($questionModel->changeQuestion($question_id, $question, $active, $answer, $category_id, $author)) {                    
-                    $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' обновил вопрос с id '.$question_id."\r\n";
+                if($questionModel->changeQuestion($questionId, $question, $active, $answer, $categoryId, $author)) {                    
+                    $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' обновил вопрос с id '.$questionId."\r\n";
                     writeLog($logData);
                     $msg = 'Вопрос обновлен!';
-                }
-                else {
+                } else {
                     $msg = 'Вопрос НЕ обновлен!';
                 }
             }
         }
-        $arCategories['changeQuestion'] = $questionModel->getQuestion($question_id);
+        $arCategories['changeQuestion'] = $questionModel->getQuestion($questionId);
         render('changeQuestion.php', $arCategories, $msg);
     }
 
@@ -89,14 +84,13 @@ class QuestionController
         $msg = '';
         if (!empty($_POST['new_category_id']) && !empty($_POST['question_id'])) {    
             $questionModel = new Question();
-            $question_id = htmlspecialchars(trim($_POST['question_id']));
-            $new_category_id = htmlspecialchars(trim($_POST['new_category_id']));
-            $questionModel->changeQuestionCategory($question_id, $new_category_id);
+            $questionId = htmlspecialchars(trim($_POST['question_id']));
+            $newCategoryId = htmlspecialchars(trim($_POST['new_category_id']));
+            $questionModel->changeQuestionCategory($questionId, $newCategoryId);
             $msg = 'Категория изменена!';    
-            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' изменил категорию у вопроса с id '.$question_id."\r\n";
+            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' изменил категорию у вопроса с id '.$questionId."\r\n";
             writeLog($logData);        
-        }
-        else {
+        } else {
             $msg = 'Ошибка';
         }
         return $msg;
@@ -109,14 +103,13 @@ class QuestionController
     {
         $msg = '';
         if (!empty($_POST['question_id'])) {
-            $question_id = (int) htmlspecialchars(trim($_POST['question_id']));
+            $questionId = (int) htmlspecialchars(trim($_POST['question_id']));
             $questionModel = new Question();
-            $questionModel->removeQuestion($question_id);
+            $questionModel->removeQuestion($questionId);
             $msg = 'Вопрос удален!';
-            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' удалил вопрос с id '.$question_id."\r\n";
+            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' удалил вопрос с id '.$questionId."\r\n";
             writeLog($logData); 
-        }
-        else {
+        } else {
             $msg = 'Передан пустой question_id';
         }
         return $msg;
@@ -142,7 +135,7 @@ class QuestionController
     /**
     *    Метод передачи запроса в модель для получения списка вопросов конкретной категории
     **/
-    public function getCategoryQuestions($category_id)
+    public function getCategoryQuestions($categoryId)
     {
         $msg = '';
         $arData = array();
@@ -150,15 +143,13 @@ class QuestionController
         $categoryModel = new Category();
         if (isset($_POST['question_remove'])) {
             $msg = $this->removeQuestion();
-        }
-        elseif (isset($_POST['change_category'])) {
+        } elseif (isset($_POST['change_category'])) {
             $msg = $this->changeCategory();
-        }
-        elseif (isset($_POST['question_active'])) {
+        } elseif (isset($_POST['question_active'])) {
             $msg = $this->changeQuestionActive();
         }
-        $arData['category_name'] = $categoryModel->getCategoryName($category_id)[0]['category_name'];
-        $arData['questions'] = $questionModel->getCategoryQuestions($category_id);
+        $arData['category_name'] = $categoryModel->getCategoryName($categoryId)[0]['category_name'];
+        $arData['questions'] = $questionModel->getCategoryQuestions($categoryId);
         $arData['categories'] = $categoryModel->getCategoryList();
         render('questionAdminPage.php', $arData, $msg);
     }
@@ -171,14 +162,13 @@ class QuestionController
         $msg = '';
         if (!empty($_POST['active']) && !empty($_POST['question_id'])) {    
             $question_active = htmlspecialchars(trim($_POST['active']));
-            $question_id = htmlspecialchars(trim($_POST['question_id']));
+            $questionId = htmlspecialchars(trim($_POST['question_id']));
             $questionModel = new Question();
-            $questionModel->changeQuestionActive($question_active, $question_id); 
+            $questionModel->changeQuestionActive($question_active, $questionId); 
             $msg = 'Статус обновлен!';
-            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' изменил статус вопроса с id '.$question_id."\r\n";
+            $logData = date('Y-m-d H-i-s').': Администратор '.$_SESSION['login'].' изменил статус вопроса с id '.$questionId."\r\n";
             writeLog($logData);           
-        }
-        else {
+        } else {
             $msg = 'Ошибка';
         }
         return $msg;
